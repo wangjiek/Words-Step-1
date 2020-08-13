@@ -38,9 +38,8 @@ class WordRepository {
         return allWordsLive;
     }
 
-    static class InsertAsyncTask extends AsyncTask<Word, Void, Void> {
+    static class InsertAsyncTask extends AsyncTask<Word, Void, Void> {//创建工作线程后台执行
         private WordDao wordDao;
-
         InsertAsyncTask(WordDao wordDao) {
             this.wordDao = wordDao;
         }
@@ -50,6 +49,8 @@ class WordRepository {
             wordDao.insertWords(words);
             return null;
         }
+
+
 
     }
 

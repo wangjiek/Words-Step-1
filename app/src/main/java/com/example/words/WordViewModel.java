@@ -12,6 +12,7 @@ public class WordViewModel extends AndroidViewModel {
     private WordRepository wordRepository;
     public WordViewModel(@NonNull Application application) {
         super(application);
+
         wordRepository = new WordRepository(application);
     }
 
@@ -31,6 +32,4 @@ public class WordViewModel extends AndroidViewModel {
     void deleteAllWords() {
         wordRepository.deleteAllWords();
     }
-
-
 }

@@ -49,11 +49,14 @@ public class WordsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         wordViewModel = ViewModelProviders.of(requireActivity()).get(WordViewModel.class);
+        //获取recyclerView控件对象
         recyclerView = requireActivity().findViewById(R.id.recyclerView);
+        //设置layoutManager有两种方式Grid Layout Manager行列，LinearLayoutManager线性
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         myAdapter1 = new MyAdapter(false,wordViewModel);
         myAdapter2 = new MyAdapter(true,wordViewModel);
         recyclerView.setAdapter(myAdapter1);
+        //Livedata观察者
         wordViewModel.getAllWordsLive().observe(requireActivity(), new Observer<List<Word>>() {
             @Override
             public void onChanged(List<Word> words) {

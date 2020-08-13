@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private List<Word> allWords = new ArrayList<>();
+    private List<Word> allWords = new ArrayList<>();//用来存放数据列表
     private boolean useCardView;
     private WordViewModel wordViewModel;
 
@@ -28,11 +28,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     void setAllWords(List<Word> allWords) {
         this.allWords = allWords;
     }
-
+    //对recycler View控件上每行进行管理
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewNumber,textViewEnglish,textViewChinese;
+        Switch aSwitchChineseInvisible;
+        MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewNumber = itemView.findViewById(R.id.textViewNumber);
+            textViewEnglish = itemView.findViewById(R.id.textViewEnglish);
+            textViewChinese = itemView.findViewById(R.id.textViewChinese);
+            aSwitchChineseInvisible = itemView.findViewById(R.id.switchChineseInvisible);
+        }
+    }
+    //创建ViewHolder时呼叫
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());//从文件中加载Recycle View
         View itemView;
         if (useCardView) {
             itemView = layoutInflater.inflate(R.layout.cell_card_2,parent,false);
@@ -43,10 +55,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //设置点击调转地址
                 Uri uri = Uri.parse("https://m.youdao.com/dict?le=eng&q=" + holder.textViewEnglish.getText());
-                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Intent intent = new Intent(Intent.ACTION_VIEW);//浏览网站
                 intent.setData(uri);
-                holder.itemView.getContext().startActivity(intent);
+                holder.itemView.getContext().startActivity(intent);//启动intent
             }
         });
 
@@ -55,7 +68,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Word word = (Word) holder.itemView.getTag(R.id.word_for_view_holder);
                 if (isChecked) {
-                    holder.textViewChinese.setVisibility(View.GONE);
+                    holder.textViewChinese.setVisibility(View.GONE);//控制控件是否显示
                     word.setChineseInvisible(true);
                     wordViewModel.updateWords(word);
                 } else {
@@ -67,10 +80,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
         return holder;
     }
-
+    //当ViewHolder绑定 recyclerView呼叫
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        final Word word = allWords.get(position);
+        final Word word = allWords.get(position);//利用下标获取对象
+        //填充数据
         holder.itemView.setTag(R.id.word_for_view_holder,word);
         holder.textViewNumber.setText(String.valueOf(position + 1));
         holder.textViewEnglish.setText(word.getWord());
@@ -85,21 +99,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
 
     }
-
+    //返回列表数据的总个数
     @Override
     public int getItemCount() {
         return allWords.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewNumber,textViewEnglish,textViewChinese;
-        Switch aSwitchChineseInvisible;
-        MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textViewNumber = itemView.findViewById(R.id.textViewNumber);
-            textViewEnglish = itemView.findViewById(R.id.textViewEnglish);
-            textViewChinese = itemView.findViewById(R.id.textViewChinese);
-            aSwitchChineseInvisible = itemView.findViewById(R.id.switchChineseInvisible);
-        }
-    }
 }
